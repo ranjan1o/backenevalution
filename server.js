@@ -113,14 +113,13 @@ app.get("/noStudents", async (req, res) => {
     }
 })
 app.get("/MostInbatch", async (req, res) => {
-    const f = "Full Stack Web Developer"
-    const android1="Android"
+  
     let ob= {
         "ninja": 0,
         "samurai": 0,
         "web11":0,
     }
-    var count = 0;
+    let count = 0;
     try {
         const user = await Student.find().lean().exec()
          
@@ -138,8 +137,8 @@ app.get("/MostInbatch", async (req, res) => {
             }
         })
     
-        var batch = ""
-        var noofstu = 0;
+        let batch = ""
+        let noofstu = 0;
         for (key in ob) {
             if (ob[key] > noofstu) {
                 noofstu = ob[key];
@@ -181,6 +180,58 @@ app.post("/classes", async (req, res) => {
     }
     
 })
+app.get("/instuctorName", async (req, res) => {
+    let ob2=["613f1a633cebec0b444a8cfe","613f1a503cebec0b444a8cfd","613f1a323cebec0b444a8cfc"]
+    
+    let ob= {
+        "ninja": [0,"613f1a323cebec0b444a8cfc"],
+        "samurai":[0,"613f1a503cebec0b444a8cfd"],
+        "web11":[0,"613f1a633cebec0b444a8cfe"],
+    }
+    let count = 0;
+    try {
+        const user = await Student.find().lean().exec()
+         
+        user.map(a => {
+        
+            if (a.batchId == "613f1a633cebec0b444a8cfe") {
+               
+                ob["web11"][0] = ob["web11"][0] + 1;
+            }
+            else if(a.batchId=="613f1a503cebec0b444a8cfd")  {
+                 ob["samurai"][0] = ob["samurai"][0] + 1
+            }
+            else {
+                 ob["ninja"][0] = ob["ninja"][0] + 1
+            }
+        })
+    
+        let batch = ""
+        let noofstu = 0;
+        var id1 = ""
+        console.log(ob)
+        for (key in ob) {
+            if (ob[key][0] > noofstu) {
+                noofstu = ob[key][0];
+                batch = key
+                id1=ob[key][1]
+           }
+        }
+      
+        const user1 = await Classes.find({ "batchId": id1 }).lean().exec()
+        const user2 = await Batch.find({ _id: { $eq: id1 } }).lean().exec();
+     
+        res.send(user1,user2)
+
+        
+    }
+    catch{
+        console.log("error");
+        
+    }
+    
+})
+ 
 
 app.listen(3001, async (req,res) => {
     await connect();
