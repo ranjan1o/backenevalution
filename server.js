@@ -78,6 +78,17 @@ app.get("/agegreater18", async (req, res) => {
         
     }
 })
+app.get("/aplliedforweb", async (req, res) => {
+    console.log("hio")
+    try {
+        const user = await Student.find({course_name:"Full Stack Web Developer"}).populate('batchId').lean().exec()
+        return res.status(200).json({user})
+    }
+    catch{
+        console.log("error");
+        
+    }
+})
 app.get("/noOfmanandWomen", async (req, res) => {
     var man = 0;
     var women = 0;
