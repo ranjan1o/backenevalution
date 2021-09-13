@@ -35,7 +35,7 @@ const Student = mongoose.model('students', studentSchema);
 const Batch=mongoose.model('batchs',batchSchema)
 app.post('/students', async (req, res) => {
     try {
-        console.log("hi")
+     
         const user = await Student.create(req.body)
         console.log(user);
         res.send("done")
@@ -48,6 +48,64 @@ app.get("/students", async (req, res) => {
     try {
         const user = await Student.find().populate('batchId').lean().exec()
         return res.status(200).json({user})
+    }
+    catch{
+        res.send("something wenr =t wrong")
+        
+    }
+})
+app.get("/agegreater18", async (req, res) => {
+    try {
+        const user = await Student.find({"age":{$gt:18}}).populate('batchId').lean().exec()
+        return res.status(200).json({user})
+    }
+    catch{
+        console.log("error");
+        
+    }
+})
+app.get("/noOfmanandWomen", async (req, res) => {
+    var man = 0;
+    var women = 0;
+    try {
+        const user = await Student.find().lean().exec()
+        user.map(a => {
+            if (a.gender =="Male") {
+                man++;
+            }
+            else {
+                women++;
+            }
+        })
+        return res.status(200).json({"man":man,"women":women})
+    }
+    catch{
+        console.log("error");
+        
+    }
+})
+app.get("/noStudents", async (req, res) => {
+    let count = 0;
+    try {
+        const user = await Student.find().lean().exec()
+        user.map(a => {
+            count++;
+        })
+        return res.status(200).json({"Total Student":count})
+    }
+    catch{
+        console.log("error");
+        
+    }
+})
+app.get("/MostInbatch", async (req, res) => {
+    let count = 0;
+    try {
+        const user = await Student.find({"batchId":"613f1a323cebec0b444a8cfc"}).lean().exec()
+        user.map(a => {
+            count++;
+        })
+        return res.status(200).json({"batch":count})
     }
     catch{
         console.log("error");
