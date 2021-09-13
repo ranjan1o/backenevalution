@@ -198,11 +198,11 @@ app.get("/instuctorName", async (req, res) => {
                
                 ob["web11"][0] = ob["web11"][0] + 1;
             }
-            else if(a.batchId=="613f1a503cebec0b444a8cfd")  {
-                 ob["samurai"][0] = ob["samurai"][0] + 1
+            else if (a.batchId == "613f1a503cebec0b444a8cfd") {
+                ob["samurai"][0] = ob["samurai"][0] + 1
             }
             else {
-                 ob["ninja"][0] = ob["ninja"][0] + 1
+                ob["ninja"][0] = ob["ninja"][0] + 1
             }
         })
     
@@ -214,14 +214,14 @@ app.get("/instuctorName", async (req, res) => {
             if (ob[key][0] > noofstu) {
                 noofstu = ob[key][0];
                 batch = key
-                id1=ob[key][1]
-           }
+                id1 = ob[key][1]
+            }
         }
       
         const user1 = await Classes.find({ "batchId": id1 }).lean().exec()
         const user2 = await Batch.find({ _id: { $eq: id1 } }).lean().exec();
      
-        res.send(user1,user2)
+        res.send({ user1, user2 })
 
         
     }
