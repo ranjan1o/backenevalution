@@ -99,13 +99,41 @@ app.get("/noStudents", async (req, res) => {
     }
 })
 app.get("/MostInbatch", async (req, res) => {
-    let count = 0;
+    const f = "Full Stack Web Developer"
+    const android1="Android"
+    let ob= {
+        "ninja": 0,
+        "samurai": 0,
+        "web11":0,
+    }
+    var count = 0;
     try {
-        const user = await Student.find({"batchId":"613f1a323cebec0b444a8cfc"}).lean().exec()
+        const user = await Student.find().lean().exec()
+         
         user.map(a => {
-            count++;
+            console.log(a.gender)
+            if (a.batchId == "613f1a633cebec0b444a8cfe") {
+               
+                ob["web11"] = ob["web11"] + 1;
+            }
+            else if(a.batchId=="613f1a503cebec0b444a8cfd")  {
+                 ob["samurai"] = ob["samurai"] + 1
+            }
+            else {
+                 ob["ninja"] = ob["ninja"] + 1
+            }
         })
-        return res.status(200).json({"batch":count})
+    
+        var batch = ""
+        var noofstu = 0;
+        for (key in ob) {
+            if (ob[key] > noofstu) {
+                noofstu = ob[key];
+                batch=key
+           }
+        }
+        res.send({"name":batch,"no of student":noofstu})
+        
     }
     catch{
         console.log("error");
