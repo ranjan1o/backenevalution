@@ -20,7 +20,7 @@ const studentSchema = new mongoose.Schema({
     course_name: { type: String, required: true },
     batchId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'batch',
+        ref: 'batchs',
         required: true
     }
 })
@@ -35,6 +35,7 @@ const Student = mongoose.model('students', studentSchema);
 const Batch=mongoose.model('batchs',batchSchema)
 app.post('/students', async (req, res) => {
     try {
+        console.log("hi")
         const user = await Student.create(req.body)
         console.log(user);
         res.send("done")
@@ -45,13 +46,15 @@ app.post('/students', async (req, res) => {
 })
 app.get("/students", async (req, res) => {
     try {
-        res.send("hi") 
+        const user = await Student.find().populate('batchId').lean().exec()
+        return res.status(200).json({user})
     }
     catch{
         console.log("error");
         
     }
 })
+
 
 //batch crud
 app.post('/batch', async (req, res) => {
