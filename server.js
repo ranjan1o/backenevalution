@@ -29,10 +29,24 @@ const batchSchema = new mongoose.Schema({
     batchName:{type:String,required:true}
 })
 
+//clsses 
+const ClassSchema = new mongoose.Schema({
+    batchId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'batchs',
+        required: true
+    }
+    ,instructor:{ type: String, required: true }
+})
 //creating model for schema
 const Student = mongoose.model('students', studentSchema);
 // creating model for batch
-const Batch=mongoose.model('batchs',batchSchema)
+const Batch = mongoose.model('batchs', batchSchema)
+
+//creating model for classes
+const Classes = mongoose.model('classes', ClassSchema)
+
+
 app.post('/students', async (req, res) => {
     try {
      
@@ -154,6 +168,18 @@ app.post('/batch', async (req, res) => {
     catch (err) {
         res.send("error ocured");
     }
+})
+
+//clases crud
+app.post("/classes", async (req, res) => {
+     try {
+        const user = await Classes.create(req.body)
+        res.send("done")
+    }
+    catch (err) {
+        res.send("error ocured");
+    }
+    
 })
 
 app.listen(3001, async (req,res) => {
